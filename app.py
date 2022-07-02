@@ -3,9 +3,6 @@ import numpy as np
 from flask import Flask, render_template, Response
 
 app = Flask(__name__)
-classifier = cv2.HOGDescriptor()
-classifier.setSVMDetector(cv2.HOGDescriptor_getDefaultPeopleDetector())
-cap = cv2.VideoCapture(0)
 
 
 @app.route('/')
@@ -19,6 +16,12 @@ def video_feed():
 
 
 def gen_frames():
+    classifier = cv2.HOGDescriptor()
+    classifier.setSVMDetector(cv2.HOGDescriptor_getDefaultPeopleDetector())
+    cap = cv2.VideoCapture(1)
+    cap.set(3, 640)
+    cap.set(4, 480)
+
     if cap.isOpened():
         print('[!] Loading video...')
     else:
