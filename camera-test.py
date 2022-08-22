@@ -3,8 +3,12 @@ import numpy as np
 from picamera import PiCamera
 from io import BytesIO
 
-classifier = cv2.HOGDescriptor()
-classifier.setSVMDetector(cv2.HOGDescriptor_getDefaultPeopleDetector())
+## Full Body Detection
+# classifier = cv2.HOGDescriptor()
+# classifier.setSVMDetector(cv2.HOGDescriptor_getDefaultPeopleDetector())
+
+## Face Detection
+classifier = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
 
 
 def cv2Camera():
@@ -26,9 +30,10 @@ def cv2Camera():
                                interpolation=cv2.INTER_LINEAR)
             grayscale = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
             # (regions, _) = classifier.detectMultiScale(grayscale, winStride=(4, 4), padding=(8, 8), scale=1.05)
+            (regions, _) = classifier.detectMultiScale(grayscale, 1.1, 4)
 
-            # for (x, y, w, h) in regions:
-                # cv2.rectangle(frame, (x, y), (x+w, y+h), (0, 175, 125), 2)
+            for (x, y, w, h) in regions:
+                cv2.rectangle(frame, (x, y), (x+w, y+h), (0, 175, 125), 2)
 
             cv2.imshow('frame', frame)
             
